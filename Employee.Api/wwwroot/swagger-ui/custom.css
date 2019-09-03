@@ -20,11 +20,12 @@
 }
 
 .swagger-ui .topbar .link span {
-    /*background-image: url(./logo.png);
+    background-image: url(./logos-swagger.svg);
     background-size: 24px 24px;
     background-repeat: no-repeat;
-    background-position: 0 6px;*/
-    /*padding-left: 30px;*/
+    background-position: 0 6px;
+    padding-left: 30px;
+    color: #febd36;
     line-height: 30px;
     min-width: 30px;
     text-shadow: 1px 1px 5px #19252e;

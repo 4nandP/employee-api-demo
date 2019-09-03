@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
+﻿using System.Reflection;
+using JsonFlatFileDataStore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
@@ -14,13 +10,14 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Serilog;
-using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Employee.Api
 {
+    /// <summary>
+    /// Application Bootstrap
+    /// </summary>
     public class Startup
     {
         private readonly ILogger<Startup> _logger;
@@ -41,6 +38,12 @@ namespace Employee.Api
         /// </value>
         public IHostingEnvironment HostingEnvironment { get; }
 
+        /// <summary>
+        /// Gets the XML comments file path.
+        /// </summary>
+        /// <value>
+        /// The XML comments file path.
+        /// </value>
         static string XmlCommentsFilePath
         {
             get
@@ -51,6 +54,12 @@ namespace Employee.Api
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Startup"/> class.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="hostingEnvironment">The hosting environment.</param>
+        /// <param name="loggerFactory">The logger factory.</param>
         public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment, ILoggerFactory loggerFactory)
         {
             Configuration = configuration;
@@ -58,9 +67,16 @@ namespace Employee.Api
             _logger = loggerFactory.CreateLogger<Startup>();
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// Configures the services.
+        /// </summary>
+        /// <param name="services">The services.</param>
         public void ConfigureServices(IServiceCollection services)
         {
+            ConfigureDataStore(services);
+            services.AddSingleton<V1.Application.Queries.IEmployeeQueries, V1.Application.Queries.EmployeeQueries>();
+            services.AddSingleton<V2.Application.Queries.IEmployeeQueries, V2.Application.Queries.EmployeeQueries>();
+
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddMvc(options =>
             {
@@ -69,7 +85,6 @@ namespace Employee.Api
             .AddControllersAsServices()
             .AddJsonOptions(options =>
             {
-                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -88,7 +103,12 @@ namespace Employee.Api
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// Configures the specified application.
+        /// </summary>
+        /// <param name="app">The application.</param>
+        /// <param name="env">The env.</param>
+        /// <param name="provider">The provider.</param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApiVersionDescriptionProvider provider)
         {
             if (env.IsDevelopment())
@@ -147,29 +167,81 @@ namespace Employee.Api
                     }
                     options.DocumentTitle = "Employee API";
                     options.InjectStylesheet("/swagger-ui/custom.css");
+                    options.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
                 });
         }
-    }
 
-    public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
-    {
-        readonly IApiVersionDescriptionProvider provider;
-
-        public ConfigureSwaggerOptions(IApiVersionDescriptionProvider provider) =>
-          this.provider = provider;
-
-        public void Configure(SwaggerGenOptions options)
+        /// <summary>
+        /// Configures the data store.
+        /// </summary>
+        /// <param name="services">The services.</param>
+        private static void ConfigureDataStore(IServiceCollection services)
         {
-            foreach (var description in provider.ApiVersionDescriptions)
-            {
-                options.SwaggerDoc(
-                  description.GroupName,
-                    new Info()
-                    {
-                        Title = $"Employee API",
-                        Version = description.ApiVersion.ToString(),
-                    });
-            }
+            var dataStoreFilePath = System.IO.Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "datastore.json");
+            var dataStore = new DataStore(dataStoreFilePath, keyProperty: "id", reloadBeforeGetCollection: true);
+
+            var collection = dataStore.GetCollection<Employee.Infrastructure.Data.Entities.Employee>();
+
+            collection.ReplaceOne("Test123",
+                new Infrastructure.Data.Entities.Employee
+                {
+                    IsOrganization = false,
+                    Title = "Mrs.",
+                    GivenName = "Jane",
+                    MiddleName = "Lane",
+                    FamilyName = "Doe",
+                    DisplayName = "Jane Lane Doe",
+                    PrintOnCheckName = "Jane Lane Doe",
+                    IsActive = true,
+                    PrimaryPhone = new Infrastructure.Data.Entities.Phone { FreeFormNumber = "505.555.9999" },
+                    PrimaryEmailAddress = new Infrastructure.Data.Entities.EmailAddress { Address = "user@example.com" },
+                    EmployeeType = "Regular",
+                    Status = "Active",
+                    Id = "Test123"
+                }, upsert: true
+                );
+
+            collection.ReplaceOne("Test456",
+                new Infrastructure.Data.Entities.Employee
+                {
+                    IsOrganization = false,
+                    Title = "Mr.",
+                    GivenName = "Joshua",
+                    MiddleName = "Keith",
+                    FamilyName = "Allen",
+                    DisplayName = "Joshua Keith Allen",
+                    PrintOnCheckName = "Joshua K. Allen",
+                    IsActive = true,
+                    PrimaryPhone = new Infrastructure.Data.Entities.Phone { FreeFormNumber = "03 5365 9595" },
+                    PrimaryEmailAddress = new Infrastructure.Data.Entities.EmailAddress { Address = "joshuaallen@armyspy.com" },
+                    EmployeeType = "Temporary",
+                    Status = "Active",
+                    Id = "Test456"
+                }, upsert: true
+                );
+
+            collection.ReplaceOne("Test789",
+                new Infrastructure.Data.Entities.Employee
+                {
+                    IsOrganization = false,
+                    Title = "Dr.",
+                    GivenName = "Alana",
+                    MiddleName = "Mactier",
+                    FamilyName = "McGuinness",
+                    DisplayName = "Alana Mactier McGuinness",
+                    PrintOnCheckName = "Alana M. McGuinness",
+                    IsActive = false,
+                    PrimaryPhone = new Infrastructure.Data.Entities.Phone { FreeFormNumber = "08 9067 3927" },
+                    PrimaryEmailAddress = new Infrastructure.Data.Entities.EmailAddress { Address = "alanamcguinness@jourrapide.com" },
+                    EmployeeType = "Regular",
+                    Status = "Active",
+                    Id = "Test789"
+                }, upsert: true
+                );
+
+            dataStore.Reload();
+
+            services.AddSingleton<IDataStore>(dataStore);
         }
     }
 }
