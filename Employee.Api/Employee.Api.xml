@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Employee.Api</name>
+    </assembly>
+    <members>
+        <member name="P:Employee.Api.Startup.Configuration">
+            <summary>
+            Gets the configuration.
+            </summary>
+            <value>
+            The configuration.
+            </value>
+        </member>
+        <member name="P:Employee.Api.Startup.HostingEnvironment">
+            <summary>
+            Gets the hosting environment.
+            </summary>
+            <value>
+            The hosting environment.
+            </value>
+        </member>
+        <member name="M:Employee.Api.V1.Controllers.ValuesController.Get">
+            <summary>
+            Retrieves all values
+            </summary>
+            <returns>all values</returns>
+        </member>
+    </members>
+</doc>
