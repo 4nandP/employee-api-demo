@@ -73,7 +73,6 @@ namespace Employee.Api
             services.AddSingleton<V1.Application.Queries.IEmployeeQueries, V1.Application.Queries.EmployeeQueries>();
             services.AddSingleton<V2.Application.Queries.IEmployeeQueries, V2.Application.Queries.EmployeeQueries>();
 
-            //services.AddRouting(options => options.LowercaseUrls = true);
             services.AddMvc()
             .AddControllersAsServices()
             .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore)

@@ -1,4 +1,5 @@
 using FakeItEasy;
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using System;
 using System.Linq;
@@ -11,10 +12,12 @@ namespace Employees.Tests.V2.Application
     {
         private Employee.Api.V2.Application.Queries.IEmployeeQueries _query;
         private JsonFlatFileDataStore.IDataStore _store;
+        private ILogger<Employee.Api.V2.Application.Queries.EmployeeQueries> _logger;
 
         [SetUp]
         public void Setup()
         {
+            _logger = A.Fake<ILogger<Employee.Api.V2.Application.Queries.EmployeeQueries>>();
             _store = A.Fake<JsonFlatFileDataStore.IDataStore>();
             var employees = new[]{new Employee.Infrastructure.Data.Entities.Employee
             {
@@ -36,7 +39,7 @@ namespace Employees.Tests.V2.Application
             var employeesCollection = A.Fake<JsonFlatFileDataStore.IDocumentCollection<Employee.Infrastructure.Data.Entities.Employee>>();
             A.CallTo(() => employeesCollection.AsQueryable()).Returns(employees);
             A.CallTo(() => _store.GetCollection<Employee.Infrastructure.Data.Entities.Employee>(null)).Returns(employeesCollection);
-            _query = new Employee.Api.V2.Application.Queries.EmployeeQueries(_store);
+            _query = new Employee.Api.V2.Application.Queries.EmployeeQueries(_store, _logger);
         }
 
         [Test(Description = "FindByIdAsync should throw exception when employee id is not provided")]
@@ -65,7 +68,7 @@ namespace Employees.Tests.V2.Application
 
             //Assert
             A.CallTo(() => _store.GetCollection<Employee.Infrastructure.Data.Entities.Employee>(null)).MustHaveHappenedOnceExactly();
-            Assert.AreEqual(result.Id, "Test123");
+            Assert.AreEqual("Test123", result.Id);
         }
     }
 }

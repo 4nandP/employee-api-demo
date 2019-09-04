@@ -26,9 +26,11 @@ namespace Employee.Api.Tests.V2
 
             // Act
             var response = await client.GetAsync(url).ConfigureAwait(false);
+            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             // Assert
             response.EnsureSuccessStatusCode(); // Status Code 200-299
+            Assert.Contains(id, content);
         }
 
         [Theory]
