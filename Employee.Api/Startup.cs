@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using JsonFlatFileDataStore;
+﻿using JsonFlatFileDataStore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +11,7 @@ using Microsoft.Extensions.PlatformAbstractions;
 using Newtonsoft.Json;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Employee.Api
@@ -89,7 +89,8 @@ namespace Employee.Api
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddApiVersioning(options => options.ReportApiVersions = true);
-            services.AddVersionedApiExplorer(options => {
+            services.AddVersionedApiExplorer(options =>
+            {
                 options.GroupNameFormat = "'v'V";
                 options.SubstituteApiVersionInUrl = true;
             });
@@ -157,6 +158,6 @@ namespace Employee.Api
             services.AddSingleton<IDataStore>(dataStore);
         }
 
-        
+
     }
 }

@@ -1,14 +1,14 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Serilog;
+using System.Threading.Tasks;
 
 namespace Employee.Api
 {
     /// <summary>
     /// The program
     /// </summary>
-    public class Program
+    public static class Program
     {
         /// <summary>
         /// Defines the entry point of the application.
@@ -18,7 +18,7 @@ namespace Employee.Api
         {
             var webHost = BuildWebHost(args);
 
-            await webHost.RunAsync();
+            await webHost.RunAsync().ConfigureAwait(false);
         }
 
         /// <summary>

@@ -38,8 +38,8 @@ namespace Employee.Api.V2.Application.Queries
                 Active = x.IsActive,
                 Organization = x.IsOrganization,
                 MiddleName = x.MiddleName,
-                PrimaryEmailAddress = x.PrimaryEmailAddress.Address ,
-                PrimaryPhone = x.PrimaryPhone.FreeFormNumber ,
+                PrimaryEmailAddress = x.PrimaryEmailAddress.Address,
+                PrimaryPhone = x.PrimaryPhone.FreeFormNumber,
                 PrintOnCheckName = x.PrintOnCheckName,
                 Status = x.Status,
                 Title = x.Title
