@@ -12,7 +12,7 @@ namespace Employee.Api.V1.Application.Queries
         /// </summary>
         /// <param name="maxResults">The maximum results.</param>
         /// <param name="startPosition">The start position.</param>
-        public QueryResponsePayload(int maxResults, int startPosition)
+        protected QueryResponsePayload(int maxResults, int startPosition)
         {
             MaxResults = maxResults;
             StartPosition = startPosition;
@@ -24,7 +24,7 @@ namespace Employee.Api.V1.Application.Queries
         /// <value>
         /// The maximum results.
         /// </value>
-        public int MaxResults { get; private set; }
+        public int MaxResults { get; }
 
         /// <summary>
         /// Gets the start position.
@@ -32,7 +32,7 @@ namespace Employee.Api.V1.Application.Queries
         /// <value>
         /// The start position.
         /// </value>
-        public int StartPosition { get; private set; }
+        public int StartPosition { get; }
     }
 
     /// <summary>

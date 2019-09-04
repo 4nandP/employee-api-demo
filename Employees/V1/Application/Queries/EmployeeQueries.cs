@@ -1,6 +1,6 @@
 ﻿using Employee.Api.V1.Domain;
 using JsonFlatFileDataStore;
-using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,8 +27,11 @@ namespace Employee.Api.V1.Application.Queries
         /// <param name="id">The identifier.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        public async Task<EmployeeQueryResponse> FindByIdAsync([FromRoute] string id, CancellationToken cancellationToken)
+        public async Task<EmployeeQueryResponse> FindByIdAsync(string id, CancellationToken cancellationToken)
         {
+            if (string.IsNullOrWhiteSpace(id))
+                throw new ArgumentNullException(nameof(id));
+
             var results = _employees.AsQueryable().Where(x => x.Id == id).Select(x => new Domain.Employee
             {
                 DisplayName = x.DisplayName,
@@ -47,7 +50,7 @@ namespace Employee.Api.V1.Application.Queries
             }).SingleOrDefault();
 
             if (results != null)
-                return await Task.FromResult(new EmployeeQueryResponse(results));
+                return await Task.FromResult(new EmployeeQueryResponse(results)).ConfigureAwait(false);
 
             return null;
         }

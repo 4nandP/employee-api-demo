@@ -1,5 +1,6 @@
 ﻿using JsonFlatFileDataStore;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,6 +29,9 @@ namespace Employee.Api.V2.Application.Queries
         /// <returns></returns>
         public async Task<Domain.Employee> FindByIdAsync([FromRoute] string id, CancellationToken cancellationToken)
         {
+            if (string.IsNullOrWhiteSpace(id))
+                throw new ArgumentNullException(nameof(id));
+
             var results = _employees.AsQueryable().Where(x => x.Id == id).Select(x => new Domain.Employee
             {
                 DisplayName = x.DisplayName,

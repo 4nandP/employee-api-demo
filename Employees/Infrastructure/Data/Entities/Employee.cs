@@ -1,6 +1,5 @@
 ﻿namespace Employee.Infrastructure.Data.Entities
 {
-
     /// <summary>
     /// Employee
     /// </summary>
