@@ -11,7 +11,7 @@ namespace Employee.Api
     /// </summary>
     public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
     {
-        readonly IApiVersionDescriptionProvider provider;
+        private readonly IApiVersionDescriptionProvider provider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigureSwaggerOptions"/> class.

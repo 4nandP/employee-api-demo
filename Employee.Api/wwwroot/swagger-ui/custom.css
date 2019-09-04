@@ -19,6 +19,10 @@
     display: none;
 }
 
+.swagger-ui .information-container.wrapper .info {
+    margin: 30px 0;
+}
+
 .swagger-ui .topbar .link span {
     background-image: url(./logos-swagger.svg);
     background-size: 24px 24px;

@@ -1,8 +1,8 @@
-using NUnit.Framework;
 using FakeItEasy;
+using NUnit.Framework;
 using System;
-using System.Threading;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Employees.Tests.V1.Application
@@ -39,7 +39,7 @@ namespace Employees.Tests.V1.Application
             _query = new Employee.Api.V1.Application.Queries.EmployeeQueries(_store);
         }
 
-        [Test(Description ="FindByIdAsync should throw exception when employee id is not provided")]
+        [Test(Description = "FindByIdAsync should throw exception when employee id is not provided")]
         public void FindByIdAsync_ShouldThrowArgumentNullException_WhenEmployeeIdIsNotProvided()
         {
             Assert.ThrowsAsync<ArgumentNullException>(async () => await _query.FindByIdAsync(null, CancellationToken.None).ConfigureAwait(false));

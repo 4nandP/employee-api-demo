@@ -21,7 +21,15 @@ namespace Employee.Api
     /// </summary>
     public class Startup
     {
+        /// <summary>
+        /// The logger
+        /// </summary>
         private readonly ILogger<Startup> _logger;
+
+        /// <summary>
+        /// The XML comments file paths
+        /// </summary>
+        private readonly List<string> _xmlCommentsFilePaths;
 
         /// <summary>
         /// Gets the configuration.
@@ -40,22 +48,6 @@ namespace Employee.Api
         public IHostingEnvironment HostingEnvironment { get; }
 
         /// <summary>
-        /// Gets the XML comments file path.
-        /// </summary>
-        /// <value>
-        /// The XML comments file path.
-        /// </value>
-        private static List<string> XmlCommentsFilePaths
-        {
-            get
-            {
-                var basePath = PlatformServices.Default.Application.ApplicationBasePath;
-                var docFiles = System.IO.Directory.GetFiles(basePath, "*.xml");
-                return docFiles.ToList();
-            }
-        }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="Startup"/> class.
         /// </summary>
         /// <param name="configuration">The configuration.</param>
@@ -66,6 +58,8 @@ namespace Employee.Api
             Configuration = configuration;
             HostingEnvironment = hostingEnvironment;
             _logger = loggerFactory.CreateLogger<Startup>();
+
+            _xmlCommentsFilePaths = System.IO.Directory.GetFiles(PlatformServices.Default.Application.ApplicationBasePath, "*.xml").ToList();
         }
 
         /// <summary>
@@ -80,10 +74,7 @@ namespace Employee.Api
             services.AddSingleton<V2.Application.Queries.IEmployeeQueries, V2.Application.Queries.EmployeeQueries>();
 
             //services.AddRouting(options => options.LowercaseUrls = true);
-            services.AddMvc(options =>
-            {
-                //options.Filters.Add(typeof(HttpGlobalExceptionFilter));
-            })
+            services.AddMvc()
             .AddControllersAsServices()
             .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore)
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -96,7 +87,7 @@ namespace Employee.Api
             });
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
-            services.AddSwaggerGen(options => XmlCommentsFilePaths.ForEach(x => options.IncludeXmlComments(x, true)));
+            services.AddSwaggerGen(options => _xmlCommentsFilePaths.ForEach(x => options.IncludeXmlComments(x, true)));
         }
 
         /// <summary>
@@ -141,7 +132,7 @@ namespace Employee.Api
                     }
                     options.DocumentTitle = "Employee API";
                     options.InjectStylesheet("/swagger-ui/custom.css");
-                    options.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.List);
+                    options.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.Full);
                     options.DefaultModelsExpandDepth(0);
                 });
         }
@@ -150,12 +141,16 @@ namespace Employee.Api
         /// Configures the data store.
         /// </summary>
         /// <param name="services">The services.</param>
-        private static void ConfigureDataStore(IServiceCollection services)
+        private void ConfigureDataStore(IServiceCollection services)
         {
+            _logger.LogInformation("Configuring JSON Data Store");
             var dataStoreFilePath = System.IO.Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "datastore.json");
+            _logger.LogInformation("DataStore location: {dataStoreFilePath}", dataStoreFilePath);
             var dataStore = new DataStore(dataStoreFilePath, keyProperty: "id", reloadBeforeGetCollection: true).SeedData();
 
             services.AddSingleton<IDataStore>(dataStore);
+
+            _logger.LogInformation("Configured JSON Data Store");
         }
     }
 }
