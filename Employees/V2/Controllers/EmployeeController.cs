@@ -32,7 +32,7 @@ namespace Employee.Api.V2.Controllers
         /// <param name="id">The employee identifier.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        [HttpGet("{id}")]
+        [HttpGet("{id}/Details")]
         [Produces(typeof(Domain.Employee))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -41,7 +41,7 @@ namespace Employee.Api.V2.Controllers
             if (string.IsNullOrEmpty(id))
                 return BadRequest(nameof(id));
 
-            var result = await _employeeQueries.FindByIdAsync(id, cancellationToken);
+            var result = await _employeeQueries.FindByIdAsync(id, cancellationToken).ConfigureAwait(false);
 
             if (result == null)
                 return NotFound();

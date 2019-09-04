@@ -16,19 +16,21 @@ namespace Employee.Api
         /// <param name="args">The arguments.</param>
         public static async Task Main(string[] args)
         {
-            var webHost = BuildWebHost(args);
+            var webHost = CreateWebHostBuilder(args).Build();
 
             await webHost.RunAsync().ConfigureAwait(false);
         }
 
         /// <summary>
-        /// Builds the web host.
+        /// Configures the WebHostBuilder
         /// </summary>
-        /// <param name="args">The arguments.</param>
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration))
-                .Build();
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        {
+            return WebHost.CreateDefaultBuilder(args)
+              .UseStartup<Startup>()
+              .UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration));
+        }
     }
 }

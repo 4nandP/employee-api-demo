@@ -45,7 +45,7 @@ namespace Employee.Api
         /// <value>
         /// The XML comments file path.
         /// </value>
-        static List<string> XmlCommentsFilePaths
+        private static List<string> XmlCommentsFilePaths
         {
             get
             {
@@ -157,7 +157,5 @@ namespace Employee.Api
 
             services.AddSingleton<IDataStore>(dataStore);
         }
-
-
     }
 }

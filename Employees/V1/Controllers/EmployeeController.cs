@@ -32,7 +32,7 @@ namespace Employee.Api.V1.Controllers
         /// <param name="id">The employee identifier.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        [HttpGet("GetDetails/{id}")]
+        [HttpGet("GetDetails/{id?}")]
         [Produces(typeof(QueryResponse))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
