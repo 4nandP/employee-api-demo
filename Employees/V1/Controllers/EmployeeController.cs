@@ -29,7 +29,7 @@ namespace Employee.Api.V1.Controllers
         /// <summary>
         /// Retrieves Employee Details
         /// </summary>
-        /// <param name="id">The identifier.</param>
+        /// <param name="id">The employee identifier.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         [HttpGet("GetDetails/{id}")]

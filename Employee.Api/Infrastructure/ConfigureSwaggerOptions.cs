@@ -32,7 +32,7 @@ namespace Employee.Api
                   description.GroupName,
                     new Info()
                     {
-                        Title = $"Employee API",
+                        Title = "Employee API",
                         Version = description.ApiVersion.ToString(),
                     });
             }

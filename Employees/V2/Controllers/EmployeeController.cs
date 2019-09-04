@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Employee.Api.V2.Application.Queries;
-using JsonFlatFileDataStore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace Employee.Api.V2.Controllers
 {
@@ -34,7 +29,7 @@ namespace Employee.Api.V2.Controllers
         /// <summary>
         /// Retrieves Employee Details
         /// </summary>
-        /// <param name="id">The identifier.</param>
+        /// <param name="id">The employee identifier.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         [HttpGet("{id}")]

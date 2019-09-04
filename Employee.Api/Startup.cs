@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
 using JsonFlatFileDataStore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +12,7 @@ using Microsoft.Extensions.PlatformAbstractions;
 using Newtonsoft.Json;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Linq;
 
 namespace Employee.Api
 {
@@ -44,13 +45,13 @@ namespace Employee.Api
         /// <value>
         /// The XML comments file path.
         /// </value>
-        static string XmlCommentsFilePath
+        static List<string> XmlCommentsFilePaths
         {
             get
             {
                 var basePath = PlatformServices.Default.Application.ApplicationBasePath;
-                var fileName = typeof(Startup).GetTypeInfo().Assembly.GetName().Name + ".xml";
-                return System.IO.Path.Combine(basePath, fileName);
+                var docFiles = System.IO.Directory.GetFiles(basePath, "*.xml");
+                return docFiles.ToList();
             }
         }
 
@@ -74,33 +75,27 @@ namespace Employee.Api
         public void ConfigureServices(IServiceCollection services)
         {
             ConfigureDataStore(services);
+
             services.AddSingleton<V1.Application.Queries.IEmployeeQueries, V1.Application.Queries.EmployeeQueries>();
             services.AddSingleton<V2.Application.Queries.IEmployeeQueries, V2.Application.Queries.EmployeeQueries>();
 
-            services.AddRouting(options => options.LowercaseUrls = true);
+            //services.AddRouting(options => options.LowercaseUrls = true);
             services.AddMvc(options =>
             {
                 //options.Filters.Add(typeof(HttpGlobalExceptionFilter));
             })
             .AddControllersAsServices()
-            .AddJsonOptions(options =>
-            {
-                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            })
+            .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore)
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddApiVersioning(
-                options =>
-                {
-                    // reporting api versions will return the headers "api-supported-versions" and "api-deprecated-versions"
-                    options.ReportApiVersions = true;
-                });
-            services.AddVersionedApiExplorer(options => { options.GroupNameFormat = "'v'V"; options.SubstituteApiVersionInUrl = true; });
-            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
-            services.AddSwaggerGen(options =>
-            {
-                options.IncludeXmlComments(XmlCommentsFilePath);
+            services.AddApiVersioning(options => options.ReportApiVersions = true);
+            services.AddVersionedApiExplorer(options => {
+                options.GroupNameFormat = "'v'V";
+                options.SubstituteApiVersionInUrl = true;
             });
+            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+
+            services.AddSwaggerGen(options => XmlCommentsFilePaths.ForEach(x => options.IncludeXmlComments(x, true)));
         }
 
         /// <summary>
@@ -135,39 +130,18 @@ namespace Employee.Api
             });
 
             app.UseMvc();
-            app.UseSwagger(options => {
-                //options.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
-                //{
-                //    swaggerDoc.BasePath = $"/v{swaggerDoc.Info.Version}";
-                //});
-                //options.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
-                //{
-                //    foreach(var path in swaggerDoc.Paths)
-                //    {
-                //        var operations = new[] { path.Value.Delete, path.Value.Get, path.Value.Patch, path.Value.Post, path.Value.Put };
-                //        foreach(var op in operations)
-                //        {
-                //            var apiVersionParam = op?.Parameters?.FirstOrDefault(p => p.Name == "api-version");
-                //            if (apiVersionParam != null)
-                //            {
-                //                op.Parameters.Remove(apiVersionParam);
-                //            }
-                //        }
-                //    }
-                //});
-            });
+            app.UseSwagger();
             app.UseSwaggerUI(
                 options =>
                 {
                     foreach (var description in provider.ApiVersionDescriptions)
                     {
-                        options.SwaggerEndpoint(
-                            $"/swagger/{description.GroupName}/swagger.json",
-                            description.GroupName.ToUpperInvariant());
+                        options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
                     }
                     options.DocumentTitle = "Employee API";
                     options.InjectStylesheet("/swagger-ui/custom.css");
-                    options.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
+                    options.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.List);
+                    options.DefaultModelsExpandDepth(0);
                 });
         }
 
@@ -178,70 +152,11 @@ namespace Employee.Api
         private static void ConfigureDataStore(IServiceCollection services)
         {
             var dataStoreFilePath = System.IO.Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "datastore.json");
-            var dataStore = new DataStore(dataStoreFilePath, keyProperty: "id", reloadBeforeGetCollection: true);
-
-            var collection = dataStore.GetCollection<Employee.Infrastructure.Data.Entities.Employee>();
-
-            collection.ReplaceOne("Test123",
-                new Infrastructure.Data.Entities.Employee
-                {
-                    IsOrganization = false,
-                    Title = "Mrs.",
-                    GivenName = "Jane",
-                    MiddleName = "Lane",
-                    FamilyName = "Doe",
-                    DisplayName = "Jane Lane Doe",
-                    PrintOnCheckName = "Jane Lane Doe",
-                    IsActive = true,
-                    PrimaryPhone = new Infrastructure.Data.Entities.Phone { FreeFormNumber = "505.555.9999" },
-                    PrimaryEmailAddress = new Infrastructure.Data.Entities.EmailAddress { Address = "user@example.com" },
-                    EmployeeType = "Regular",
-                    Status = "Active",
-                    Id = "Test123"
-                }, upsert: true
-                );
-
-            collection.ReplaceOne("Test456",
-                new Infrastructure.Data.Entities.Employee
-                {
-                    IsOrganization = false,
-                    Title = "Mr.",
-                    GivenName = "Joshua",
-                    MiddleName = "Keith",
-                    FamilyName = "Allen",
-                    DisplayName = "Joshua Keith Allen",
-                    PrintOnCheckName = "Joshua K. Allen",
-                    IsActive = true,
-                    PrimaryPhone = new Infrastructure.Data.Entities.Phone { FreeFormNumber = "03 5365 9595" },
-                    PrimaryEmailAddress = new Infrastructure.Data.Entities.EmailAddress { Address = "joshuaallen@armyspy.com" },
-                    EmployeeType = "Temporary",
-                    Status = "Active",
-                    Id = "Test456"
-                }, upsert: true
-                );
-
-            collection.ReplaceOne("Test789",
-                new Infrastructure.Data.Entities.Employee
-                {
-                    IsOrganization = false,
-                    Title = "Dr.",
-                    GivenName = "Alana",
-                    MiddleName = "Mactier",
-                    FamilyName = "McGuinness",
-                    DisplayName = "Alana Mactier McGuinness",
-                    PrintOnCheckName = "Alana M. McGuinness",
-                    IsActive = false,
-                    PrimaryPhone = new Infrastructure.Data.Entities.Phone { FreeFormNumber = "08 9067 3927" },
-                    PrimaryEmailAddress = new Infrastructure.Data.Entities.EmailAddress { Address = "alanamcguinness@jourrapide.com" },
-                    EmployeeType = "Regular",
-                    Status = "Active",
-                    Id = "Test789"
-                }, upsert: true
-                );
-
-            dataStore.Reload();
+            var dataStore = new DataStore(dataStoreFilePath, keyProperty: "id", reloadBeforeGetCollection: true).SeedData();
 
             services.AddSingleton<IDataStore>(dataStore);
         }
+
+        
     }
 }
