@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Mvc.Testing;
+using Newtonsoft.Json.Linq;
+using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -61,6 +64,34 @@ namespace Employee.Api.Tests.V1
 
             // Assert
             Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetDetails_EndpointsReturnMatchingSchema()
+        {
+            // Arrange
+            var url = $"/api/v1/Employee/GetDetails/Test123";
+            var client = _factory.CreateClient();
+            var expectedResponse = await GetJsonResource("Employee.Api.Tests.V1.Test123.json").ConfigureAwait(false);
+
+            // Act
+            var response = await client.GetAsync(url).ConfigureAwait(false);
+            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var jsonContent = JObject.Parse(content);
+
+            // Assert
+            response.EnsureSuccessStatusCode(); // Status Code 200-299
+            Assert.Equal(expectedResponse, jsonContent);
+        }
+
+        private async Task<JObject> GetJsonResource(string resourceName)
+        {
+            var stream = typeof(EmployeeControllerTests).Assembly.GetManifestResourceStream(resourceName);
+            using (var reader = new StreamReader(stream))
+            {
+                var str = await reader.ReadToEndAsync().ConfigureAwait(false);
+                return JObject.Parse(str);
+            }
         }
     }
 }
