@@ -1,0 +1,15 @@
+{
+  "active": true,
+  "displayName": "Jane Lane Doe",
+  "employeeType": "Regular",
+  "familyName": "Doe",
+  "givenName": "Jane",
+  "id": "Test123",
+  "middleName": "Lane",
+  "organization": false,
+  "primaryPhone": "505.555.9999",
+  "primaryEmailAddress": "user@example.com",
+  "printOnCheckName": "Jane Lane Doe",
+  "status": "Active",
+  "title": "Mrs."
+}

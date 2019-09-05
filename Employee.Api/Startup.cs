@@ -1,4 +1,5 @@
-﻿using JsonFlatFileDataStore;
+﻿using Employees.Infrastructure;
+using JsonFlatFileDataStore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,8 @@ using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using System.Linq;
+using V1 = Employees.V1;
+using V2 = Employees.V2;
 
 namespace Employee.Api
 {

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc.Testing;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.IO;
 using System.Reflection;
@@ -72,7 +73,7 @@ namespace Employee.Api.Tests.V1
             // Arrange
             var url = $"/api/v1/Employee/GetDetails/Test123";
             var client = _factory.CreateClient();
-            var expectedResponse = await GetJsonResource("Employee.Api.Tests.V1.Test123.json").ConfigureAwait(false);
+            var expectedResponse = await ResourceHelper.GetJsonResource("Employee.Api.Tests.V1.Test123.json").ConfigureAwait(false);
 
             // Act
             var response = await client.GetAsync(url).ConfigureAwait(false);
@@ -82,16 +83,6 @@ namespace Employee.Api.Tests.V1
             // Assert
             response.EnsureSuccessStatusCode(); // Status Code 200-299
             Assert.Equal(expectedResponse, jsonContent);
-        }
-
-        private async Task<JObject> GetJsonResource(string resourceName)
-        {
-            var stream = typeof(EmployeeControllerTests).Assembly.GetManifestResourceStream(resourceName);
-            using (var reader = new StreamReader(stream))
-            {
-                var str = await reader.ReadToEndAsync().ConfigureAwait(false);
-                return JObject.Parse(str);
-            }
         }
     }
 }

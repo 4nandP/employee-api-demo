@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc.Testing;
+using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -47,6 +48,24 @@ namespace Employee.Api.Tests.V2
 
             // Assert
             Assert.Equal(System.Net.HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetDetails_EndpointsReturnMatchingSchema()
+        {
+            // Arrange
+            var url = $"/api/v2/Employee/Test123/Details";
+            var client = _factory.CreateClient();
+            var expectedResponse = await ResourceHelper.GetJsonResource("Employee.Api.Tests.V2.Test123.json").ConfigureAwait(false);
+
+            // Act
+            var response = await client.GetAsync(url).ConfigureAwait(false);
+            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var jsonContent = JObject.Parse(content);
+
+            // Assert
+            response.EnsureSuccessStatusCode(); // Status Code 200-299
+            Assert.Equal(expectedResponse, jsonContent);
         }
     }
 }
