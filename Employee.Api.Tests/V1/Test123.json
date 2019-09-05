@@ -1,5 +1,7 @@
 {
   "QueryResponse": {
+    "maxResults": 1,
+    "startPosition": 1,
     "Employee": {
       "Active": true,
       "DisplayName": "Jane Lane Doe",
@@ -14,8 +16,6 @@
       "PrintOnCheckName": "Jane Lane Doe",
       "status": "Active",
       "Title": "Mrs."
-    },
-    "maxResults": 1,
-    "startPosition": 1
+    }
   }
 }

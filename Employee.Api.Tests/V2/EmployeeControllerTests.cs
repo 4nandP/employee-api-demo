@@ -2,11 +2,13 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 using Xunit;
+using FluentAssertions;
+using FluentAssertions.Json;
+
 
 namespace Employee.Api.Tests.V2
 {
-    public class EmployeeControllerTests
-        : IClassFixture<WebApplicationFactory<Employee.Api.Startup>>
+    public class EmployeeControllerTests : IClassFixture<WebApplicationFactory<Employee.Api.Startup>>
     {
         private readonly WebApplicationFactory<Employee.Api.Startup> _factory;
 
@@ -21,17 +23,28 @@ namespace Employee.Api.Tests.V2
         [InlineData("Test789")]
         public async Task GetDetails_EndpointsReturnMatchingRecord(string id)
         {
+            await AssertMatchingRecordReturned(id);
+        }
+
+        private async Task<JToken> AssertMatchingRecordReturned(string id)
+        {
             // Arrange
             var url = $"/api/v2/Employee/{id}/Details";
             var client = _factory.CreateClient();
 
             // Act
             var response = await client.GetAsync(url).ConfigureAwait(false);
-            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var contentRaw = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var content = JToken.Parse(contentRaw);
+
 
             // Assert
-            response.EnsureSuccessStatusCode(); // Status Code 200-299
-            Assert.Contains(id, content);
+            response.IsSuccessStatusCode.Should().Be(true);
+            response.Content.Headers.ContentType.MediaType.Should().Be("application/json");
+            content.Should().HaveElement("id");
+            content.SelectToken("id").Should().HaveValue(id);
+
+            return content;
         }
 
         [Theory]
@@ -47,25 +60,20 @@ namespace Employee.Api.Tests.V2
             var response = await client.GetAsync(url).ConfigureAwait(false);
 
             // Assert
-            Assert.Equal(System.Net.HttpStatusCode.NotFound, response.StatusCode);
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
         }
 
         [Fact]
         public async Task GetDetails_EndpointsReturnMatchingSchema()
         {
             // Arrange
-            var url = $"/api/v2/Employee/Test123/Details";
-            var client = _factory.CreateClient();
             var expectedResponse = await ResourceHelper.GetJsonResource("Employee.Api.Tests.V2.Test123.json").ConfigureAwait(false);
 
             // Act
-            var response = await client.GetAsync(url).ConfigureAwait(false);
-            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            var jsonContent = JObject.Parse(content);
+            var jsonContent = await AssertMatchingRecordReturned("Test123");
 
             // Assert
-            response.EnsureSuccessStatusCode(); // Status Code 200-299
-            Assert.Equal(expectedResponse, jsonContent);
+            jsonContent.Should().BeEquivalentTo(expectedResponse);
         }
     }
 }

@@ -1,3 +1,5 @@
+using FluentAssertions;
+using FluentAssertions.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -24,17 +26,30 @@ namespace Employee.Api.Tests.V1
         [InlineData("Test789")]
         public async Task GetDetails_EndpointsReturnMatchingRecord(string id)
         {
+            await AssertMatchingRecordReturned(id);
+        }
+
+        private async Task<JToken> AssertMatchingRecordReturned(string id)
+        {
             // Arrange
             var url = $"/api/v1/Employee/GetDetails/{id}";
             var client = _factory.CreateClient();
 
             // Act
             var response = await client.GetAsync(url).ConfigureAwait(false);
-            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var contentRaw = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var content = JToken.Parse(contentRaw);
+
 
             // Assert
-            response.EnsureSuccessStatusCode(); // Status Code 200-299
-            Assert.Contains(id, content);
+            response.IsSuccessStatusCode.Should().Be(true);
+            response.Content.Headers.ContentType.MediaType.Should().Be("application/json");
+            content.Should().HaveElement("QueryResponse");
+            content.SelectToken("QueryResponse").Should().HaveElement("Employee");
+            content.SelectToken("QueryResponse").SelectToken("Employee").Should().HaveElement("Id");
+            content.SelectToken("QueryResponse").SelectToken("Employee").SelectToken("Id").Should().HaveValue(id);
+
+            return content;
         }
 
         [Theory]
@@ -50,7 +65,7 @@ namespace Employee.Api.Tests.V1
             var response = await client.GetAsync(url).ConfigureAwait(false);
 
             // Assert
-            Assert.Equal(System.Net.HttpStatusCode.NotFound, response.StatusCode);
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
         }
 
         [Fact]
@@ -64,25 +79,20 @@ namespace Employee.Api.Tests.V1
             var response = await client.GetAsync(url).ConfigureAwait(false);
 
             // Assert
-            Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
         }
 
         [Fact]
         public async Task GetDetails_EndpointsReturnMatchingSchema()
         {
             // Arrange
-            var url = $"/api/v1/Employee/GetDetails/Test123";
-            var client = _factory.CreateClient();
             var expectedResponse = await ResourceHelper.GetJsonResource("Employee.Api.Tests.V1.Test123.json").ConfigureAwait(false);
 
             // Act
-            var response = await client.GetAsync(url).ConfigureAwait(false);
-            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            var jsonContent = JObject.Parse(content);
+            var jsonContent = await AssertMatchingRecordReturned("Test123");
 
             // Assert
-            response.EnsureSuccessStatusCode(); // Status Code 200-299
-            Assert.Equal(expectedResponse, jsonContent);
+            jsonContent.Should().BeEquivalentTo(expectedResponse);
         }
     }
 }
