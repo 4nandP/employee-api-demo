@@ -5,7 +5,6 @@ using Xunit;
 using FluentAssertions;
 using FluentAssertions.Json;
 
-
 namespace Employee.Api.Tests.V2
 {
     public class EmployeeControllerTests : IClassFixture<WebApplicationFactory<Employee.Api.Startup>>
@@ -23,7 +22,7 @@ namespace Employee.Api.Tests.V2
         [InlineData("Test789")]
         public async Task GetDetails_EndpointsReturnMatchingRecord(string id)
         {
-            await AssertMatchingRecordReturned(id);
+            await AssertMatchingRecordReturned(id).ConfigureAwait(false);
         }
 
         private async Task<JToken> AssertMatchingRecordReturned(string id)
@@ -36,7 +35,6 @@ namespace Employee.Api.Tests.V2
             var response = await client.GetAsync(url).ConfigureAwait(false);
             var contentRaw = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             var content = JToken.Parse(contentRaw);
-
 
             // Assert
             response.IsSuccessStatusCode.Should().Be(true);
@@ -70,7 +68,7 @@ namespace Employee.Api.Tests.V2
             var expectedResponse = await ResourceHelper.GetJsonResource("Employee.Api.Tests.V2.Test123.json").ConfigureAwait(false);
 
             // Act
-            var jsonContent = await AssertMatchingRecordReturned("Test123");
+            var jsonContent = await AssertMatchingRecordReturned("Test123").ConfigureAwait(false);
 
             // Assert
             jsonContent.Should().BeEquivalentTo(expectedResponse);

@@ -11,7 +11,7 @@
         /// <value>
         ///   <c>true</c> if active; otherwise, <c>false</c>.
         /// </value>
-        public bool Active { get; set; }
+        public bool IsActive { get; set; }
 
         /// <summary>
         /// Gets or sets the display name.
@@ -67,7 +67,7 @@
         /// <value>
         ///   <c>true</c> if organization; otherwise, <c>false</c>.
         /// </value>
-        public bool Organization { get; set; }
+        public bool IsOrganization { get; set; }
 
         /// <summary>
         /// Gets or sets the primary email address.

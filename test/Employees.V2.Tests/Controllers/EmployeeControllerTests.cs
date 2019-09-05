@@ -25,14 +25,14 @@ namespace Employees.Tests.V2.Controllers
             A.CallTo(() => _query.FindByIdAsync(A<string>.Ignored, A<CancellationToken>.Ignored)).Returns(Task.FromResult<Employee>(null));
             A.CallTo(() => _query.FindByIdAsync("Test123", A<CancellationToken>.Ignored)).Returns(Task.FromResult(new Employee
             {
-                Organization = false,
+                IsOrganization = false,
                 Title = "Mrs.",
                 GivenName = "Jane",
                 MiddleName = "Lane",
                 FamilyName = "Doe",
                 DisplayName = "Jane Lane Doe",
                 PrintOnCheckName = "Jane Lane Doe",
-                Active = true,
+                IsActive = true,
                 PrimaryPhone = "505.555.9999",
                 PrimaryEmailAddress = "user@example.com",
                 EmployeeType = "Regular",

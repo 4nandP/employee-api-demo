@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="__Instrumented/**" Visible="false" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="altcover" Version="6.1.708" />
     <PackageReference Include="ReportGenerator" Version="4.2.19" />
     <PackageReference Include="FakeItEasy" Version="5.1.2" />
