@@ -70,5 +70,23 @@ namespace Employees.Tests.V2.Application
             A.CallTo(() => _store.GetCollection<Employees.Infrastructure.Data.Entities.Employee>(null)).MustHaveHappenedOnceExactly();
             Assert.AreEqual("Test123", result.Id);
         }
+
+        [Test(Description = "FindByIdAsync should short-circuit with null when cancelled")]
+        public async Task FindByIdAsync_ShouldReturnNull_WhenCancelled()
+        {
+            using (CancellationTokenSource source = new CancellationTokenSource())
+            {
+                //Arrange
+                var ct = source.Token;
+                source.Cancel();
+
+                //Act
+                var result = await _query.FindByIdAsync("Test123", ct).ConfigureAwait(false);
+
+                //Assert
+                A.CallTo(() => _store.GetCollection<Employees.Infrastructure.Data.Entities.Employee>(null)).MustHaveHappenedOnceExactly();
+                Assert.IsNull(result);
+            }
+        }
     }
 }

@@ -13,14 +13,14 @@ namespace Employees.Tests.V2.Controllers
     public class EmployeeControllerTests
     {
         private IEmployeeQueries _query;
-        private EmployeeController _controller;
-        private ILogger<EmployeeController> _logger;
+        private EmployeesController _controller;
+        private ILogger<EmployeesController> _logger;
 
         [SetUp]
         public void Setup()
         {
             _query = A.Fake<IEmployeeQueries>();
-            _logger = A.Fake<ILogger<EmployeeController>>();
+            _logger = A.Fake<ILogger<EmployeesController>>();
 
             A.CallTo(() => _query.FindByIdAsync(A<string>.Ignored, A<CancellationToken>.Ignored)).Returns(Task.FromResult<Employee>(null));
             A.CallTo(() => _query.FindByIdAsync("Test123", A<CancellationToken>.Ignored)).Returns(Task.FromResult(new Employee
@@ -40,7 +40,7 @@ namespace Employees.Tests.V2.Controllers
                 Id = "Test123"
             }));
 
-            _controller = new EmployeeController(_query, _logger);
+            _controller = new EmployeesController(_query, _logger);
         }
 
         [Test]

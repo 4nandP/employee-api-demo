@@ -46,6 +46,7 @@ namespace Employees.Tests.V1.Application
         [Test(Description = "FindByIdAsync should throw exception when employee id is not provided")]
         public void FindByIdAsync_ShouldThrowArgumentNullException_WhenEmployeeIdIsNotProvided()
         {
+            // Assert
             Assert.ThrowsAsync<ArgumentNullException>(async () => await _query.FindByIdAsync(null, CancellationToken.None).ConfigureAwait(false));
             A.CallTo(() => _store.GetCollection<Employees.Infrastructure.Data.Entities.Employee>(null)).MustHaveHappenedOnceExactly();
         }
@@ -70,6 +71,24 @@ namespace Employees.Tests.V1.Application
             //Assert
             A.CallTo(() => _store.GetCollection<Employees.Infrastructure.Data.Entities.Employee>(null)).MustHaveHappenedOnceExactly();
             Assert.AreEqual("Test123", result.Employee.Id);
+        }
+
+        [Test(Description ="FindByIdAsync should short-circuit with null when cancelled")]
+        public async Task FindByIdAsync_ShouldReturnNull_WhenCancelled()
+        {
+            using (CancellationTokenSource source = new CancellationTokenSource())
+            {
+                //Arrange
+                var ct = source.Token;
+                source.Cancel();
+
+                //Act
+                var result = await _query.FindByIdAsync("Test123", ct).ConfigureAwait(false);
+
+                //Assert
+                A.CallTo(() => _store.GetCollection<Employees.Infrastructure.Data.Entities.Employee>(null)).MustHaveHappenedOnceExactly();
+                Assert.IsNull(result);
+            }
         }
     }
 }

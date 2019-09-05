@@ -29,7 +29,7 @@ namespace Employee.Api.Tests.V2
         private async Task<JToken> AssertMatchingRecordReturned(string id)
         {
             // Arrange
-            var url = $"/api/v2/Employee/{id}/Details";
+            var url = $"/api/v2/Employees/{id}/Details";
             var client = _factory.CreateClient();
 
             // Act
@@ -53,7 +53,7 @@ namespace Employee.Api.Tests.V2
         public async Task GetDetails_EndpointsReturnNotFound(string id)
         {
             // Arrange
-            var url = $"/api/v2/Employee/{id}/Details";
+            var url = $"/api/v2/Employees/{id}/Details";
             var client = _factory.CreateClient();
 
             // Act

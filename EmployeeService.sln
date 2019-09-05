@@ -19,8 +19,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Employees.V1.Tests", "test\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Employees.V2.Tests", "test\Employees.V2.Tests\Employees.V2.Tests.csproj", "{0E05FD9A-EA6C-4E3D-8DA7-5417466824CB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tools", "tools\Minicover.csproj", "{DD18F24D-BBE1-4EB1-BA00-70D413894926}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,10 +53,6 @@ Global
 		{0E05FD9A-EA6C-4E3D-8DA7-5417466824CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E05FD9A-EA6C-4E3D-8DA7-5417466824CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E05FD9A-EA6C-4E3D-8DA7-5417466824CB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DD18F24D-BBE1-4EB1-BA00-70D413894926}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DD18F24D-BBE1-4EB1-BA00-70D413894926}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DD18F24D-BBE1-4EB1-BA00-70D413894926}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DD18F24D-BBE1-4EB1-BA00-70D413894926}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

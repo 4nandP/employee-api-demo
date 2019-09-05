@@ -9,14 +9,13 @@
   <ItemGroup>
     <None Remove="V1\Test123.json" />
     <None Remove="V2\Test123.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="V1\Test123.json" />
     <EmbeddedResource Include="V2\Test123.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="altcover" Version="6.1.708" />
+    <PackageReference Include="ReportGenerator" Version="4.2.19" />
     <PackageReference Include="FluentAssertions.Json" Version="5.2.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
     <PackageReference Include="SonarAnalyzer.CSharp" Version="7.16.0.8981">

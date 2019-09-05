@@ -5,6 +5,7 @@ project.lock.json
 *.pyc
 nupkg/
 
+
 # Visual Studio Code
 .vscode
 
@@ -39,6 +40,4 @@ msbuild.wrn
 .vs/
 
 # Code coverage
-coverage-html
-coverage.json
-coverage.hits
+__Instrumented/

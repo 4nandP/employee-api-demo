@@ -14,17 +14,17 @@ namespace Employees.V2.Controllers
     [ApiVersion("2")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    public class EmployeeController : ControllerBase
+    public class EmployeesController : ControllerBase
     {
-        private readonly ILogger<EmployeeController> _logger;
+        private readonly ILogger<EmployeesController> _logger;
         private readonly IEmployeeQueries _employeeQueries;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EmployeeController" /> class.
+        /// Initializes a new instance of the <see cref="EmployeesController" /> class.
         /// </summary>
         /// <param name="employeeQueries">The employee queries.</param>
         /// <param name="logger">The logger.</param>
-        public EmployeeController(IEmployeeQueries employeeQueries, ILogger<EmployeeController> logger)
+        public EmployeesController(IEmployeeQueries employeeQueries, ILogger<EmployeesController> logger)
         {
             _logger = logger;
             _employeeQueries = employeeQueries;
