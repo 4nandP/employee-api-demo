@@ -17,9 +17,9 @@ nupkg/
 *.userosscache
 *.sln.docstates
 *.log
-*.xml
 
 # Build results
+*.xml
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
@@ -37,3 +37,8 @@ msbuild.wrn
 
 # Visual Studio 2015
 .vs/
+
+# Code coverage
+coverage-html
+coverage.json
+coverage.hits

@@ -1,0 +1,34 @@
+<html>
+<body style="font-family: monospace;">
+<div style="white-space: pre;background-color: #EEF4ED;" title=""><span style="margin-right: 5px;">&nbsp;</span>using Newtonsoft.Json;</div>
+<div style="white-space: pre;background-color: #EEF4ED;" title=""><span style="margin-right: 5px;">&nbsp;</span>&nbsp;</div>
+<div style="white-space: pre;background-color: #EEF4ED;" title=""><span style="margin-right: 5px;">&nbsp;</span>namespace Employees.V1.Application.Queries</div>
+<div style="white-space: pre;background-color: #EEF4ED;" title=""><span style="margin-right: 5px;">&nbsp;</span>{</div>
+<div style="white-space: pre;background-color: #EEF4ED;" title=""><span style="margin-right: 5px;">&nbsp;</span>    /// &lt;summary&gt;</div>
+<div style="white-space: pre;background-color: #EEF4ED;" title=""><span style="margin-right: 5px;">&nbsp;</span>    /// Employee details query response</div>
+<div style="white-space: pre;background-color: #EEF4ED;" title=""><span style="margin-right: 5px;">&nbsp;</span>    /// &lt;/summary&gt;</div>
+<div style="white-space: pre;background-color: #EEF4ED;" title=""><span style="margin-right: 5px;">&nbsp;</span>    /// &lt;seealso cref=&quot;Employees.V1.Application.Queries.QueryResponsePayload&quot; /&gt;</div>
+<div style="white-space: pre;background-color: #EEF4ED;" title=""><span style="margin-right: 5px;">&nbsp;</span>    [JsonObject]</div>
+<div style="white-space: pre;background-color: #EEF4ED;" title=""><span style="margin-right: 5px;">&nbsp;</span>    public class EmployeeQueryResponse : QueryResponsePayload</div>
+<div style="white-space: pre;background-color: #EEF4ED;" title=""><span style="margin-right: 5px;">&nbsp;</span>    {</div>
+<div style="white-space: pre;background-color: #EEF4ED;" title=""><span style="margin-right: 5px;">&nbsp;</span>        /// &lt;summary&gt;</div>
+<div style="white-space: pre;background-color: #EEF4ED;" title=""><span style="margin-right: 5px;">&nbsp;</span>        /// Initializes a new instance of the &lt;see cref=&quot;EmployeeQueryResponse&quot;/&gt; class.</div>
+<div style="white-space: pre;background-color: #EEF4ED;" title=""><span style="margin-right: 5px;">&nbsp;</span>        /// &lt;/summary&gt;</div>
+<div style="white-space: pre;background-color: #EEF4ED;" title=""><span style="margin-right: 5px;">&nbsp;</span>        /// &lt;param name=&quot;employee&quot;&gt;The employee.&lt;/param&gt;</div>
+<div style="white-space: pre;background-color: #D2EACE;" title="Employees.Tests.V1.Application.EmployeeQueriesTests.FindByIdAsync_ShouldReturnAnEmployee_WhenEmployeeIdExists (1), Employees.Tests.V1.Controllers.EmployeeControllerTests.Setup (3)"><span style="cursor: pointer; margin-right: 5px;" title="Covered by tests: Employees.Tests.V1.Application.EmployeeQueriesTests.FindByIdAsync_ShouldReturnAnEmployee_WhenEmployeeIdExists (1), Employees.Tests.V1.Controllers.EmployeeControllerTests.Setup (3) for 4">&#9432;</span>        public EmployeeQueryResponse(Employees.V1.Domain.Employee employee) : base(1, 1)</div>
+<div style="white-space: pre;background-color: #EEF4ED;" title=""><span style="margin-right: 5px;">&nbsp;</span>        {</div>
+<div style="white-space: pre;background-color: #D2EACE;" title="Employees.Tests.V1.Application.EmployeeQueriesTests.FindByIdAsync_ShouldReturnAnEmployee_WhenEmployeeIdExists (1), Employees.Tests.V1.Controllers.EmployeeControllerTests.Setup (3)"><span style="cursor: pointer; margin-right: 5px;" title="Covered by tests: Employees.Tests.V1.Application.EmployeeQueriesTests.FindByIdAsync_ShouldReturnAnEmployee_WhenEmployeeIdExists (1), Employees.Tests.V1.Controllers.EmployeeControllerTests.Setup (3) for 4">&#9432;</span>            Employee = employee;</div>
+<div style="white-space: pre;background-color: #EEF4ED;" title=""><span style="margin-right: 5px;">&nbsp;</span>        }</div>
+<div style="white-space: pre;background-color: #EEF4ED;" title=""><span style="margin-right: 5px;">&nbsp;</span>&nbsp;</div>
+<div style="white-space: pre;background-color: #EEF4ED;" title=""><span style="margin-right: 5px;">&nbsp;</span>        /// &lt;summary&gt;</div>
+<div style="white-space: pre;background-color: #EEF4ED;" title=""><span style="margin-right: 5px;">&nbsp;</span>        /// Gets or sets the employee.</div>
+<div style="white-space: pre;background-color: #EEF4ED;" title=""><span style="margin-right: 5px;">&nbsp;</span>        /// &lt;/summary&gt;</div>
+<div style="white-space: pre;background-color: #EEF4ED;" title=""><span style="margin-right: 5px;">&nbsp;</span>        /// &lt;value&gt;</div>
+<div style="white-space: pre;background-color: #EEF4ED;" title=""><span style="margin-right: 5px;">&nbsp;</span>        /// The employee.</div>
+<div style="white-space: pre;background-color: #EEF4ED;" title=""><span style="margin-right: 5px;">&nbsp;</span>        /// &lt;/value&gt;</div>
+<div style="white-space: pre;background-color: #EEF4ED;" title=""><span style="margin-right: 5px;">&nbsp;</span>        [JsonProperty(&quot;Employee&quot;)]</div>
+<div style="white-space: pre;background-color: #D2EACE;" title="Employees.Tests.V1.Application.EmployeeQueriesTests.FindByIdAsync_ShouldReturnAnEmployee_WhenEmployeeIdExists (1), Employees.Tests.V1.Application.EmployeeQueriesTests.FindByIdAsync_ShouldReturnAnEmployee_WhenEmployeeIdExists (1), Employees.Tests.V1.Controllers.EmployeeControllerTests.Setup (3)"><span style="cursor: pointer; margin-right: 5px;" title="Covered by tests: Employees.Tests.V1.Application.EmployeeQueriesTests.FindByIdAsync_ShouldReturnAnEmployee_WhenEmployeeIdExists (1), Employees.Tests.V1.Application.EmployeeQueriesTests.FindByIdAsync_ShouldReturnAnEmployee_WhenEmployeeIdExists (1), Employees.Tests.V1.Controllers.EmployeeControllerTests.Setup (3) for 5">&#9432;</span>        public Employees.V1.Domain.Employee Employee { get; set; }</div>
+<div style="white-space: pre;background-color: #EEF4ED;" title=""><span style="margin-right: 5px;">&nbsp;</span>    }</div>
+<div style="white-space: pre;background-color: #EEF4ED;" title=""><span style="margin-right: 5px;">&nbsp;</span>}</div>
+</body>
+</html>
