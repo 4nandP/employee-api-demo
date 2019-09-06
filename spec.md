@@ -1,3 +1,6 @@
+# Specification
+> This is the provided specification. Ideally, there would be discussion to gain clarification (especially on the desired behaviour).
+
 A Get-Web-API targeting .net core that should return employee details with the Url details mentioned 
 - Use the attached Json structure that has the response the API is expecting (see below) 
 - The back-end can be an file system to retrieve the data.

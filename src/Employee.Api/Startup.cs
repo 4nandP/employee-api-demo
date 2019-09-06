@@ -73,8 +73,8 @@ namespace Employee.Api
         {
             ConfigureDataStore(services);
 
-            services.AddSingleton<V1.Application.Queries.IEmployeeQueries, V1.Application.Queries.EmployeeQueries>();
-            services.AddSingleton<V2.Application.Queries.IEmployeeQueries, V2.Application.Queries.EmployeeQueries>();
+            services.AddScoped<V1.Application.Queries.IEmployeeQueries, V1.Application.Queries.EmployeeQueries>();
+            services.AddScoped<V2.Application.Queries.IEmployeeQueries, V2.Application.Queries.EmployeeQueries>();
 
             services.AddMvc()
             .AddControllersAsServices()
@@ -148,9 +148,11 @@ namespace Employee.Api
             _logger.LogTrace("Configuring JSON Data Store");
             var dataStoreFilePath = System.IO.Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "datastore.json");
             _logger.LogInformation("DataStore location: {dataStoreFilePath}", dataStoreFilePath);
-            var dataStore = new DataStore(dataStoreFilePath, keyProperty: "id", reloadBeforeGetCollection: true).SeedData();
 
-            services.AddSingleton<IDataStore>(dataStore);
+            services.AddScoped<IDataStore>(_ => new DataStore(dataStoreFilePath, keyProperty: "id", reloadBeforeGetCollection: true));
+
+            _logger.LogTrace("Seeding JSON Data Store");
+            new DataStore(dataStoreFilePath, keyProperty: "id", reloadBeforeGetCollection: true).SeedData();
 
             _logger.LogTrace("Configured JSON Data Store");
         }
