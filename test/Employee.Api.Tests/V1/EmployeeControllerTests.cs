@@ -1,10 +1,7 @@
 using FluentAssertions;
 using FluentAssertions.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.IO;
-using System.Reflection;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -24,38 +21,15 @@ namespace Employee.Api.Tests.V1
         [InlineData("Test123")]
         [InlineData("Test456")]
         [InlineData("Test789")]
-        public async Task GetDetails_EndpointsReturnMatchingRecord(string id)
+        public async Task GetDetails_ShouldReturnMatchingRecord_WhenIdIsValid(string id)
         {
-            await AssertMatchingRecordReturned(id);
-        }
-
-        private async Task<JToken> AssertMatchingRecordReturned(string id)
-        {
-            // Arrange
-            var url = $"/api/v1/Employee/GetDetails/{id}";
-            var client = _factory.CreateClient();
-
-            // Act
-            var response = await client.GetAsync(url).ConfigureAwait(false);
-            var contentRaw = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            var content = JToken.Parse(contentRaw);
-
-
-            // Assert
-            response.IsSuccessStatusCode.Should().Be(true);
-            response.Content.Headers.ContentType.MediaType.Should().Be("application/json");
-            content.Should().HaveElement("QueryResponse");
-            content.SelectToken("QueryResponse").Should().HaveElement("Employee");
-            content.SelectToken("QueryResponse").SelectToken("Employee").Should().HaveElement("Id");
-            content.SelectToken("QueryResponse").SelectToken("Employee").SelectToken("Id").Should().HaveValue(id);
-
-            return content;
+            await AssertMatchingRecordReturned(id).ConfigureAwait(false);
         }
 
         [Theory]
         [InlineData("Noone")]
         [InlineData("Nobody")]
-        public async Task GetDetails_EndpointsReturnNotFound(string id)
+        public async Task GetDetails_ShouldReturnNotFound_WhenIdIsInvalid(string id)
         {
             // Arrange
             var url = $"/api/v1/Employee/GetDetails/{id}";
@@ -69,7 +43,7 @@ namespace Employee.Api.Tests.V1
         }
 
         [Fact]
-        public async Task GetDetails_EndpointsReturnBadRequest()
+        public async Task GetDetails_ShouldReturnBadRequest_WhenIdNotProvided()
         {
             // Arrange
             var url = $"/api/v1/Employee/GetDetails/";
@@ -83,16 +57,38 @@ namespace Employee.Api.Tests.V1
         }
 
         [Fact]
-        public async Task GetDetails_EndpointsReturnMatchingSchema()
+        public async Task GetDetails_ShouldReturnMatchingSchema_WhenIdIsTest123()
         {
             // Arrange
             var expectedResponse = await ResourceHelper.GetJsonResource("Employee.Api.Tests.V1.Test123.json").ConfigureAwait(false);
 
             // Act
-            var jsonContent = await AssertMatchingRecordReturned("Test123");
+            var jsonContent = await AssertMatchingRecordReturned("Test123").ConfigureAwait(false);
 
             // Assert
             jsonContent.Should().BeEquivalentTo(expectedResponse);
+        }
+
+        private async Task<JToken> AssertMatchingRecordReturned(string id)
+        {
+            // Arrange
+            var url = $"/api/v1/Employee/GetDetails/{id}";
+            var client = _factory.CreateClient();
+
+            // Act
+            var response = await client.GetAsync(url).ConfigureAwait(false);
+
+            // Assert
+            response.IsSuccessStatusCode.Should().Be(true);
+            response.Content.Headers.ContentType.MediaType.Should().Be("application/json");
+            var contentRaw = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var content = JToken.Parse(contentRaw);
+            content.Should().HaveElement("QueryResponse");
+            content.SelectToken("QueryResponse").Should().HaveElement("Employee");
+            content.SelectToken("QueryResponse").SelectToken("Employee").Should().HaveElement("Id");
+            content.SelectToken("QueryResponse").SelectToken("Employee").SelectToken("Id").Should().HaveValue(id);
+
+            return content;
         }
     }
 }

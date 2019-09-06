@@ -73,7 +73,7 @@ namespace Employees.Tests.V1.Application
             Assert.AreEqual("Test123", result.Employee.Id);
         }
 
-        [Test(Description ="FindByIdAsync should short-circuit with null when cancelled")]
+        [Test(Description = "FindByIdAsync should short-circuit with null when cancelled")]
         public async Task FindByIdAsync_ShouldReturnNull_WhenCancelled()
         {
             using (CancellationTokenSource source = new CancellationTokenSource())

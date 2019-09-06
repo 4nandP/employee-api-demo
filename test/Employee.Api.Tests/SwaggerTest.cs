@@ -1,8 +1,5 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -20,7 +17,7 @@ namespace Employee.Api.Tests
         [Theory]
         [InlineData("v1")]
         [InlineData("v2")]
-        public async Task SwaggerEndpoints_ShouldReturnSpec(string version)
+        public async Task SwaggerEndpoints_ShouldReturnSpec_ForVersion(string version)
         {
             // Arrange
             var url = $"/swagger/{version}/swagger.json";

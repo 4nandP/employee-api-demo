@@ -46,7 +46,7 @@ namespace Employees.Tests.V2.Controllers
         [Test]
         public async Task GetDetails_ShouldReturnBadRequest_WhenIdIsNotProvided()
         {
-            var result = await _controller.GetDetails(null, CancellationToken.None).ConfigureAwait(false);
+            var result = await _controller.Detail(null, CancellationToken.None).ConfigureAwait(false);
 
             Assert.IsInstanceOf<BadRequestObjectResult>(result);
             Assert.AreEqual("id", ((BadRequestObjectResult)result).Value);
@@ -55,7 +55,7 @@ namespace Employees.Tests.V2.Controllers
         [Test]
         public async Task GetDetails_ShouldReturnNotFound_WhenIdDoesNotMatchAnEmployee()
         {
-            var result = await _controller.GetDetails("Noone", CancellationToken.None).ConfigureAwait(false);
+            var result = await _controller.Detail("Noone", CancellationToken.None).ConfigureAwait(false);
 
             Assert.IsInstanceOf<NotFoundResult>(result);
         }
@@ -63,7 +63,7 @@ namespace Employees.Tests.V2.Controllers
         [Test]
         public async Task GetDetails_ShouldReturnOk_WhenIdMatchesAnEmployee()
         {
-            var result = await _controller.GetDetails("Test123", CancellationToken.None).ConfigureAwait(false);
+            var result = await _controller.Detail("Test123", CancellationToken.None).ConfigureAwait(false);
 
             Assert.IsInstanceOf<OkObjectResult>(result);
         }

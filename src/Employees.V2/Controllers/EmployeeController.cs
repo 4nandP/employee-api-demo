@@ -36,11 +36,11 @@ namespace Employees.V2.Controllers
         /// <param name="id">The employee identifier.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        [HttpGet("{id}/Details")]
+        [HttpGet("{id}/Detail")]
         [Produces(typeof(Domain.Employee))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetDetails(string id, CancellationToken cancellationToken)
+        public async Task<IActionResult> Detail(string id, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(id))
                 return BadRequest(nameof(id));
