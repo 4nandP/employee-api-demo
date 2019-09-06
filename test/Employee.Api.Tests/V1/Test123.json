@@ -1,0 +1,21 @@
+{
+  "QueryResponse": {
+    "maxResults": 1,
+    "startPosition": 1,
+    "Employee": {
+      "Active": true,
+      "DisplayName": "Jane Lane Doe",
+      "EmployeeType": "Regular",
+      "FamilyName": "Doe",
+      "GivenName": "Jane",
+      "Id": "Test123",
+      "MiddleName": "Lane",
+      "Organisation": false,
+      "PrimaryEmailAddr": { "Address": "user@example.com" },
+      "PrimaryPhone": { "FreeFormNumber": "505.555.9999" },
+      "PrintOnCheckName": "Jane Lane Doe",
+      "status": "Active",
+      "Title": "Mrs."
+    }
+  }
+}

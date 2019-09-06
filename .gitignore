@@ -5,6 +5,7 @@ project.lock.json
 *.pyc
 nupkg/
 
+
 # Visual Studio Code
 .vscode
 
@@ -19,6 +20,7 @@ nupkg/
 *.log
 
 # Build results
+*.xml
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
@@ -36,3 +38,6 @@ msbuild.wrn
 
 # Visual Studio 2015
 .vs/
+
+# Code coverage
+__Instrumented/

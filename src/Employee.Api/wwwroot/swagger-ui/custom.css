@@ -1,0 +1,73 @@
+﻿.swagger-ui .topbar {
+    background-color: #1b75bc;
+}
+
+    .swagger-ui .topbar .download-url-wrapper .select-label select {
+        border-color: #febd36;
+    }
+
+    .swagger-ui .topbar .download-url-wrapper .select-label > span {
+        color: #ffffff;
+        text-shadow: 1px 1px 5px #19252e;
+    }
+
+.swagger-ui .scheme-container {
+    display: none;
+}
+
+.swagger-ui .topbar .link img {
+    display: none;
+}
+
+.swagger-ui .information-container.wrapper .info {
+    margin: 30px 0;
+}
+
+.swagger-ui .topbar .link span {
+    background-image: url(./logos-swagger.svg);
+    background-size: 24px 24px;
+    background-repeat: no-repeat;
+    background-position: 0 4px;
+    padding-left: 30px;
+    color: #febd36;
+    line-height: 30px;
+    min-width: 30px;
+    text-shadow: 1px 1px 5px #19252e;
+}
+
+#swagger-ui > section > div.swagger-ui > div > div.scheme-container {
+    padding: 10px 0;
+}
+
+#swagger-ui > section > div.swagger-ui > div > div.information-container.wrapper > section > div {
+    margin: 10px 0;
+}
+
+#swagger-ui > section > div.swagger-ui > div > .wrapper > section > div > .opblock-tag-section {
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+    margin-bottom: 15px;
+}
+
+    #swagger-ui > section > div.swagger-ui > div > .wrapper > section > div > .opblock-tag-section > div {
+        padding: 8px 10px 0 10px !important;
+    }
+
+    #swagger-ui > section > div.swagger-ui > div > .wrapper > section > div > .opblock-tag-section:not(.is-open) > h4 {
+        margin: 0;
+    }
+
+#swagger-ui > .swagger-container > .swagger-ui > div > .wrapper > section > div > span > .opblock-tag-section > div > span > .opblock > .opblock-summary > .opblock-summary-description {
+    text-align: right;
+}
+
+#swagger-ui > .swagger-container > .swagger-ui > div > .wrapper > section > div > span > .opblock-tag-section > div > span > .opblock > div > .opblock-body > .responses-wrapper > .responses-inner > div > div > .responses-table > tbody > .response > .response-col_description > div > .highlight-code > .download-contents {
+    right: 25px;
+}
+
+.model-container > span > div > span > span > span:nth-child(3) {
+    display: none;
+}
+
+#client_id {
+    min-width: 100%;
+}
