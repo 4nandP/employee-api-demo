@@ -24,7 +24,7 @@ The majority of the API plumbing logging (urls, response code, timing) is handle
 Most of the logging added is trace level which is filtered out in the current Serilog configuration.
 
 ## Testing
-[![Coverage Stats](test/artifacts/badge_combined.svg)](test/artifacts/summary.mht)
+[![Coverage Stats](test/artifacts/badge_combined.svg)](test/artifacts/Summary.mht)
 
 > We weren't supplied with any BDD artifacts, hence SpecFlow wasn't used.
 ### Unit Tests
