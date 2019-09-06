@@ -24,7 +24,7 @@ namespace Employee.Api.Tests
             var client = _factory.CreateClient();
 
             // Act
-            var response = await client.GetAsync(url).ConfigureAwait(false);
+            var response = await client.GetAsync(url);
 
             // Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);

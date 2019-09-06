@@ -81,7 +81,7 @@ namespace Employees.V2.Application.Queries
             if (results != null)
             {
                 _logger.LogTrace("Employee [{id}] found", id);
-                return await Task.FromResult(results).ConfigureAwait(false);
+                return await Task.FromResult(results);
             }
 
             _logger.LogTrace("Employee [{id}] not found", id);

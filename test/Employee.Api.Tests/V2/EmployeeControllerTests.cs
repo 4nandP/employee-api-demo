@@ -22,7 +22,7 @@ namespace Employee.Api.Tests.V2
         [InlineData("Test789")]
         public async Task GetDetails_ShouldReturnMatchingRecord_WhenIdIsValid(string id)
         {
-            await AssertMatchingRecordReturned(id).ConfigureAwait(false);
+            await AssertMatchingRecordReturned(id);
         }
 
         [Theory]
@@ -35,7 +35,7 @@ namespace Employee.Api.Tests.V2
             var client = _factory.CreateClient();
 
             // Act
-            var response = await client.GetAsync(url).ConfigureAwait(false);
+            var response = await client.GetAsync(url);
 
             // Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
@@ -45,10 +45,10 @@ namespace Employee.Api.Tests.V2
         public async Task GetDetails_ShouldReturnMatchingSchema_WhenIdIsTest123()
         {
             // Arrange
-            var expectedResponse = await ResourceHelper.GetJsonResource("Employee.Api.Tests.V2.Test123.json").ConfigureAwait(false);
+            var expectedResponse = await ResourceHelper.GetJsonResource("Employee.Api.Tests.V2.Test123.json");
 
             // Act
-            var jsonContent = await AssertMatchingRecordReturned("Test123").ConfigureAwait(false);
+            var jsonContent = await AssertMatchingRecordReturned("Test123");
 
             // Assert
             jsonContent.Should().BeEquivalentTo(expectedResponse);
@@ -61,11 +61,11 @@ namespace Employee.Api.Tests.V2
             var client = _factory.CreateClient();
 
             // Act
-            var response = await client.GetAsync(url).ConfigureAwait(false);
+            var response = await client.GetAsync(url);
 
             // Assert
             response.IsSuccessStatusCode.Should().Be(true);
-            var contentRaw = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var contentRaw = await response.Content.ReadAsStringAsync();
             var content = JToken.Parse(contentRaw);
             response.Content.Headers.ContentType.MediaType.Should().Be("application/json");
             content.Should().HaveElement("id");

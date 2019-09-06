@@ -12,7 +12,7 @@ namespace Employee.Api.Tests
             var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName);
             using (var reader = new StreamReader(stream))
             {
-                var str = await reader.ReadToEndAsync().ConfigureAwait(false);
+                var str = await reader.ReadToEndAsync();
                 return JToken.Parse(str);
             }
         }

@@ -18,7 +18,7 @@ namespace Employee.Api
         {
             var webHost = CreateWebHostBuilder(args).Build();
 
-            await webHost.RunAsync().ConfigureAwait(false);
+            await webHost.RunAsync();
         }
 
         /// <summary>

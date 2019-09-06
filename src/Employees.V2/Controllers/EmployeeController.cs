@@ -41,7 +41,7 @@ namespace Employees.V2.Controllers
             if (string.IsNullOrEmpty(id))
                 return BadRequest(nameof(id));
 
-            var result = await _employeeQueries.FindByIdAsync(id, cancellationToken).ConfigureAwait(false);
+            var result = await _employeeQueries.FindByIdAsync(id, cancellationToken);
 
             if (result == null)
                 return NotFound();

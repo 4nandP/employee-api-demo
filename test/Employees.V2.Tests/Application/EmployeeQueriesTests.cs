@@ -51,7 +51,7 @@ namespace Employees.Tests.V2.Application
         [Test(Description = "FindByIdAsync should throw exception when employee id is not provided")]
         public void FindByIdAsync_ShouldThrowArgumentNullException_WhenEmployeeIdIsNotProvided()
         {
-            Assert.ThrowsAsync<ArgumentNullException>(async () => await _query.FindByIdAsync(null, CancellationToken.None).ConfigureAwait(false));
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await _query.FindByIdAsync(null, CancellationToken.None));
             A.CallTo(() => _store.GetCollection<Employees.Infrastructure.Data.Entities.Employee>(null)).MustNotHaveHappened();
         }
 
@@ -59,7 +59,7 @@ namespace Employees.Tests.V2.Application
         public async Task FindByIdAsync_ShouldReturnNull_WhenEmployeeIdDoesNotExist()
         {
             //Act
-            var result = await _query.FindByIdAsync("FakeId", CancellationToken.None).ConfigureAwait(false);
+            var result = await _query.FindByIdAsync("FakeId", CancellationToken.None);
 
             //Assert
             A.CallTo(() => _store.GetCollection<Employees.Infrastructure.Data.Entities.Employee>(null)).MustHaveHappenedOnceExactly();
@@ -70,7 +70,7 @@ namespace Employees.Tests.V2.Application
         public async Task FindByIdAsync_ShouldReturnAnEmployee_WhenEmployeeIdExists()
         {
             //Act
-            var result = await _query.FindByIdAsync(_expectedEmployee.Id, CancellationToken.None).ConfigureAwait(false);
+            var result = await _query.FindByIdAsync(_expectedEmployee.Id, CancellationToken.None);
 
             //Assert
             A.CallTo(() => _store.GetCollection<Employees.Infrastructure.Data.Entities.Employee>(null)).MustHaveHappenedOnceExactly();
@@ -99,7 +99,7 @@ namespace Employees.Tests.V2.Application
                 source.Cancel();
 
                 //Act
-                var result = await _query.FindByIdAsync("Test123", ct).ConfigureAwait(false);
+                var result = await _query.FindByIdAsync("Test123", ct);
 
                 //Assert
                 A.CallTo(() => _store.GetCollection<Employees.Infrastructure.Data.Entities.Employee>(null)).MustNotHaveHappened();
