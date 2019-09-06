@@ -13,13 +13,11 @@ namespace Employees.Tests.V2.Application
         private Employees.V2.Application.Queries.IEmployeeQueries _query;
         private JsonFlatFileDataStore.IDataStore _store;
         private ILogger<Employees.V2.Application.Queries.EmployeeQueries> _logger;
+        private readonly Infrastructure.Data.Entities.Employee _expectedEmployee;
 
-        [SetUp]
-        public void Setup()
+        public EmployeeQueriesTests()
         {
-            _logger = A.Fake<ILogger<Employees.V2.Application.Queries.EmployeeQueries>>();
-            _store = A.Fake<JsonFlatFileDataStore.IDataStore>();
-            var employees = new[]{new Employees.Infrastructure.Data.Entities.Employee
+            _expectedEmployee = new Infrastructure.Data.Entities.Employee
             {
                 IsOrganization = false,
                 Title = "Mrs.",
@@ -34,7 +32,15 @@ namespace Employees.Tests.V2.Application
                 EmployeeType = "Regular",
                 Status = "Active",
                 Id = "Test123"
-            } }.ToList();
+            };
+        }
+
+        [SetUp]
+        public void Setup()
+        {
+            _logger = A.Fake<ILogger<Employees.V2.Application.Queries.EmployeeQueries>>();
+            _store = A.Fake<JsonFlatFileDataStore.IDataStore>();
+            var employees = new[]{ _expectedEmployee }.ToList();
 
             var employeesCollection = A.Fake<JsonFlatFileDataStore.IDocumentCollection<Employees.Infrastructure.Data.Entities.Employee>>();
             A.CallTo(() => employeesCollection.AsQueryable()).Returns(employees);
@@ -64,11 +70,23 @@ namespace Employees.Tests.V2.Application
         public async Task FindByIdAsync_ShouldReturnAnEmployee_WhenEmployeeIdExists()
         {
             //Act
-            var result = await _query.FindByIdAsync("Test123", CancellationToken.None).ConfigureAwait(false);
+            var result = await _query.FindByIdAsync(_expectedEmployee.Id, CancellationToken.None).ConfigureAwait(false);
 
             //Assert
             A.CallTo(() => _store.GetCollection<Employees.Infrastructure.Data.Entities.Employee>(null)).MustHaveHappenedOnceExactly();
-            Assert.AreEqual("Test123", result.Id);
+            Assert.AreEqual(_expectedEmployee.Id, result.Id);
+            Assert.AreEqual(_expectedEmployee.DisplayName, result.DisplayName);
+            Assert.AreEqual(_expectedEmployee.EmployeeType, result.EmployeeType);
+            Assert.AreEqual(_expectedEmployee.FamilyName, result.FamilyName);
+            Assert.AreEqual(_expectedEmployee.GivenName, result.GivenName);
+            Assert.AreEqual(_expectedEmployee.IsActive, result.IsActive);
+            Assert.AreEqual(_expectedEmployee.IsOrganization, result.IsOrganization);
+            Assert.AreEqual(_expectedEmployee.MiddleName, result.MiddleName);
+            Assert.AreEqual(_expectedEmployee.PrimaryEmailAddress.Address, result.PrimaryEmailAddress);
+            Assert.AreEqual(_expectedEmployee.PrimaryPhone.FreeFormNumber, result.PrimaryPhone);
+            Assert.AreEqual(_expectedEmployee.PrintOnCheckName, result.PrintOnCheckName);
+            Assert.AreEqual(_expectedEmployee.Status, result.Status);
+            Assert.AreEqual(_expectedEmployee.Title, result.Title);
         }
 
         [Test(Description = "FindByIdAsync should short-circuit with null when cancelled")]

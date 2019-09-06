@@ -33,7 +33,7 @@ namespace Employees.V1.Controllers
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         [HttpGet("GetDetails/{id?}")]
-        [Produces(typeof(QueryResponse))]
+        [Produces(typeof(QueryResponse<EmployeeQueryResponse>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetDetails(string id, CancellationToken cancellationToken)

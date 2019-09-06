@@ -41,24 +41,24 @@ namespace Employees.V1.Application.Queries
     public static class QueryResponsePayloadExtensions
     {
         /// <summary>
-        /// Converts the payload to a <see cref="QueryResponse"/>.
+        /// Converts the payload to a <see cref="QueryResponse{T}"/>.
         /// </summary>
         /// <param name="target">The target.</param>
         /// <returns></returns>
-        public static QueryResponse ToQueryResponse(this QueryResponsePayload target) => new QueryResponse(target);
+        public static QueryResponse<T> ToQueryResponse<T>(this T target) where T : QueryResponsePayload => new QueryResponse<T>(target);
     }
 
     /// <summary>
     /// Wraps a query response
     /// </summary>
     [JsonObject]
-    public class QueryResponse
+    public class QueryResponse<T> where T: QueryResponsePayload
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="QueryResponse"/> class.
+        /// Initializes a new instance of the <see cref="QueryResponse{T}"/> class.
         /// </summary>
         /// <param name="payload">The payload.</param>
-        public QueryResponse(QueryResponsePayload payload)
+        public QueryResponse(T payload)
         {
             QueryResponseData = payload;
         }
@@ -70,6 +70,6 @@ namespace Employees.V1.Application.Queries
         /// The query response data.
         /// </value>
         [JsonProperty("QueryResponse")]
-        public QueryResponsePayload QueryResponseData { get; }
+        public T QueryResponseData { get; }
     }
 }

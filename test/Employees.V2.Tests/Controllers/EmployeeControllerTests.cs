@@ -13,14 +13,11 @@ namespace Employees.Tests.V2.Controllers
     {
         private IEmployeeQueries _query;
         private EmployeesController _controller;
+        private readonly Employee _expectedEmployee;
 
-        [SetUp]
-        public void Setup()
+        public EmployeeControllerTests()
         {
-            _query = A.Fake<IEmployeeQueries>();
-
-            A.CallTo(() => _query.FindByIdAsync(A<string>.Ignored, A<CancellationToken>.Ignored)).Returns(Task.FromResult<Employee>(null));
-            A.CallTo(() => _query.FindByIdAsync("Test123", A<CancellationToken>.Ignored)).Returns(Task.FromResult(new Employee
+            _expectedEmployee = new Employee
             {
                 IsOrganization = false,
                 Title = "Mrs.",
@@ -35,7 +32,16 @@ namespace Employees.Tests.V2.Controllers
                 EmployeeType = "Regular",
                 Status = "Active",
                 Id = "Test123"
-            }));
+            };
+        }
+
+        [SetUp]
+        public void Setup()
+        {
+            _query = A.Fake<IEmployeeQueries>();
+
+            A.CallTo(() => _query.FindByIdAsync(A<string>.Ignored, A<CancellationToken>.Ignored)).Returns(Task.FromResult<Employee>(null));
+            A.CallTo(() => _query.FindByIdAsync("Test123", A<CancellationToken>.Ignored)).Returns(Task.FromResult(_expectedEmployee));
 
             _controller = new EmployeesController(_query);
         }
@@ -63,6 +69,23 @@ namespace Employees.Tests.V2.Controllers
             var result = await _controller.Detail("Test123", CancellationToken.None).ConfigureAwait(false);
 
             Assert.IsInstanceOf<OkObjectResult>(result);
+            var t = (OkObjectResult)result;
+            Assert.IsInstanceOf<Employee>(t.Value);
+            var employee = t.Value as Employee;
+            Assert.NotNull(employee);
+            Assert.AreEqual(_expectedEmployee.IsActive, employee.IsActive);
+            Assert.AreEqual(_expectedEmployee.DisplayName, employee.DisplayName);
+            Assert.AreEqual(_expectedEmployee.EmployeeType, employee.EmployeeType);
+            Assert.AreEqual(_expectedEmployee.FamilyName, employee.FamilyName);
+            Assert.AreEqual(_expectedEmployee.GivenName, employee.GivenName);
+            Assert.AreEqual(_expectedEmployee.Id, employee.Id);
+            Assert.AreEqual(_expectedEmployee.MiddleName, employee.MiddleName);
+            Assert.AreEqual(_expectedEmployee.IsOrganization, employee.IsOrganization);
+            Assert.AreEqual(_expectedEmployee.PrimaryEmailAddress, employee.PrimaryEmailAddress);
+            Assert.AreEqual(_expectedEmployee.PrimaryPhone, employee.PrimaryPhone);
+            Assert.AreEqual(_expectedEmployee.PrintOnCheckName, employee.PrintOnCheckName);
+            Assert.AreEqual(_expectedEmployee.Status, employee.Status);
+            Assert.AreEqual(_expectedEmployee.Title, employee.Title);
         }
     }
 }
