@@ -1,9 +1,8 @@
-﻿using Employees.V1.Application.Queries;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Employees.V1.Application.Queries;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Employees.V1.Controllers
 {
@@ -16,18 +15,15 @@ namespace Employees.V1.Controllers
     [ApiController]
     public class EmployeeController : ControllerBase
     {
-        private readonly ILogger<EmployeeController> _logger;
         private readonly IEmployeeQueries _employeeQueries;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EmployeeController" /> class.
         /// </summary>
         /// <param name="employeeQueries">The employee queries.</param>
-        /// <param name="logger">The logger.</param>
-        public EmployeeController(IEmployeeQueries employeeQueries, ILogger<EmployeeController> logger)
+        public EmployeeController(IEmployeeQueries employeeQueries)
         {
             _employeeQueries = employeeQueries;
-            _logger = logger;
         }
 
         /// <summary>

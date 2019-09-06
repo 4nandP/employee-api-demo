@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Serilog;
-using System.Threading.Tasks;
 
 namespace Employee.Api
 {

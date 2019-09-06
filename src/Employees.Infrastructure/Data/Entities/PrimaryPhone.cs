@@ -1,6 +1,5 @@
 ﻿namespace Employees.Infrastructure.Data.Entities
 {
-
     /// <summary>
     /// Phone number
     /// </summary>

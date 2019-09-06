@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
-using System.IO;
+﻿using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace Employee.Api.Tests
 {

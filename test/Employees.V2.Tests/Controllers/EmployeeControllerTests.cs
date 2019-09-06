@@ -1,12 +1,11 @@
-﻿using Employees.V2.Application.Queries;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Employees.V2.Application.Queries;
 using Employees.V2.Controllers;
 using Employees.V2.Domain;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using NUnit.Framework;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Employees.Tests.V2.Controllers
 {
@@ -14,13 +13,11 @@ namespace Employees.Tests.V2.Controllers
     {
         private IEmployeeQueries _query;
         private EmployeesController _controller;
-        private ILogger<EmployeesController> _logger;
 
         [SetUp]
         public void Setup()
         {
             _query = A.Fake<IEmployeeQueries>();
-            _logger = A.Fake<ILogger<EmployeesController>>();
 
             A.CallTo(() => _query.FindByIdAsync(A<string>.Ignored, A<CancellationToken>.Ignored)).Returns(Task.FromResult<Employee>(null));
             A.CallTo(() => _query.FindByIdAsync("Test123", A<CancellationToken>.Ignored)).Returns(Task.FromResult(new Employee
@@ -40,7 +37,7 @@ namespace Employees.Tests.V2.Controllers
                 Id = "Test123"
             }));
 
-            _controller = new EmployeesController(_query, _logger);
+            _controller = new EmployeesController(_query);
         }
 
         [Test]

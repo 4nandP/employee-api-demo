@@ -1,10 +1,10 @@
-﻿using Employees.V1.Domain;
-using JsonFlatFileDataStore;
-using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Employees.V1.Domain;
+using JsonFlatFileDataStore;
+using Microsoft.Extensions.Logging;
 
 namespace Employees.V1.Application.Queries
 {
@@ -16,7 +16,7 @@ namespace Employees.V1.Application.Queries
     {
         private readonly ILogger<EmployeeQueries> _logger;
 
-        private readonly IDocumentCollection<Infrastructure.Data.Entities.Employee> _employees;
+        private readonly Lazy<IDocumentCollection<Infrastructure.Data.Entities.Employee>> _employees;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EmployeeQueries" /> class.
@@ -26,7 +26,7 @@ namespace Employees.V1.Application.Queries
         public EmployeeQueries(IDataStore store, ILogger<EmployeeQueries> logger)
         {
             _logger = logger;
-            _employees = store.GetCollection<Infrastructure.Data.Entities.Employee>();
+            _employees = new Lazy<IDocumentCollection<Infrastructure.Data.Entities.Employee>>(() => store.GetCollection<Infrastructure.Data.Entities.Employee>());
         }
 
         /// <summary>
@@ -39,6 +39,8 @@ namespace Employees.V1.Application.Queries
         {
             if (string.IsNullOrWhiteSpace(id))
                 throw new ArgumentNullException(nameof(id));
+
+            _logger.LogTrace("Finding Employee [{id}]", id);
 
             return FindByIdInternalAsync(id, cancellationToken);
         }
@@ -56,13 +58,11 @@ namespace Employees.V1.Application.Queries
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                _logger.LogInformation("Cancelling");
+                _logger.LogTrace("Cancelling query");
                 return null;
             }
 
-            _logger.LogInformation("Finding Employee [{id}]", id);
-
-            var results = _employees.AsQueryable().Where(x => x.Id == id).Select(x => new Domain.Employee
+            var results = _employees.Value.AsQueryable().Where(x => x.Id == id).Select(x => new Domain.Employee
             {
                 DisplayName = x.DisplayName,
                 EmployeeType = x.EmployeeType,
@@ -81,11 +81,11 @@ namespace Employees.V1.Application.Queries
 
             if (results != null)
             {
-                _logger.LogInformation("Employee [{id}] found", id);
+                _logger.LogTrace("Employee [{id}] found", id);
                 return await Task.FromResult(new EmployeeQueryResponse(results)).ConfigureAwait(false);
             }
 
-            _logger.LogInformation("Employee [{id}] not found", id);
+            _logger.LogTrace("Employee [{id}] not found", id);
 
             return null;
         }

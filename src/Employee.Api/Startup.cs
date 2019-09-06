@@ -1,4 +1,6 @@
-﻿using Employees.Infrastructure;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Employees.Infrastructure;
 using JsonFlatFileDataStore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,8 +14,6 @@ using Microsoft.Extensions.PlatformAbstractions;
 using Newtonsoft.Json;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System.Collections.Generic;
-using System.Linq;
 using V1 = Employees.V1;
 using V2 = Employees.V2;
 
@@ -145,14 +145,14 @@ namespace Employee.Api
         /// <param name="services">The services.</param>
         private void ConfigureDataStore(IServiceCollection services)
         {
-            _logger.LogInformation("Configuring JSON Data Store");
+            _logger.LogTrace("Configuring JSON Data Store");
             var dataStoreFilePath = System.IO.Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "datastore.json");
             _logger.LogInformation("DataStore location: {dataStoreFilePath}", dataStoreFilePath);
             var dataStore = new DataStore(dataStoreFilePath, keyProperty: "id", reloadBeforeGetCollection: true).SeedData();
 
             services.AddSingleton<IDataStore>(dataStore);
 
-            _logger.LogInformation("Configured JSON Data Store");
+            _logger.LogTrace("Configured JSON Data Store");
         }
     }
 }

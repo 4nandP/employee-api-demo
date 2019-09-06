@@ -1,10 +1,10 @@
-using FakeItEasy;
-using Microsoft.Extensions.Logging;
-using NUnit.Framework;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FakeItEasy;
+using Microsoft.Extensions.Logging;
+using NUnit.Framework;
 
 namespace Employees.Tests.V2.Application
 {
@@ -46,7 +46,7 @@ namespace Employees.Tests.V2.Application
         public void FindByIdAsync_ShouldThrowArgumentNullException_WhenEmployeeIdIsNotProvided()
         {
             Assert.ThrowsAsync<ArgumentNullException>(async () => await _query.FindByIdAsync(null, CancellationToken.None).ConfigureAwait(false));
-            A.CallTo(() => _store.GetCollection<Employees.Infrastructure.Data.Entities.Employee>(null)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _store.GetCollection<Employees.Infrastructure.Data.Entities.Employee>(null)).MustNotHaveHappened();
         }
 
         [Test(Description = "FindByIdAsync should return null when employee id does not match a record")]
@@ -84,7 +84,7 @@ namespace Employees.Tests.V2.Application
                 var result = await _query.FindByIdAsync("Test123", ct).ConfigureAwait(false);
 
                 //Assert
-                A.CallTo(() => _store.GetCollection<Employees.Infrastructure.Data.Entities.Employee>(null)).MustHaveHappenedOnceExactly();
+                A.CallTo(() => _store.GetCollection<Employees.Infrastructure.Data.Entities.Employee>(null)).MustNotHaveHappened();
                 Assert.IsNull(result);
             }
         }

@@ -1,8 +1,8 @@
+using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json.Linq;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Employee.Api.Tests.V1

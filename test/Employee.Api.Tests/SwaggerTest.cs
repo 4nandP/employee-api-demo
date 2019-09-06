@@ -1,6 +1,6 @@
-﻿using FluentAssertions;
+﻿using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Employee.Api.Tests
