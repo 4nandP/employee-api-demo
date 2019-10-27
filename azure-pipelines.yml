@@ -45,4 +45,4 @@ steps:
   inputs:
     command: test
     projects: '**/*Tests/*.csproj'
-    arguments: '--configuration $(buildConfiguration) /p:AltCover=true /p:AltCoverThreshold=90 /p:AltCoverAssemblyExcludeFilter="NUnit|Microsoft|xunit|AltCover|Tests" /p:AltCoverTypeFilter="Program" /p:AltCoverForce=true /p:AltCoverLocalSource=true'
+    arguments: '--configuration $(buildConfiguration) /p:AltCover=true /p:AltCoverThreshold=80 /p:AltCoverAssemblyExcludeFilter="NUnit|Microsoft|xunit|AltCover|Tests" /p:AltCoverTypeFilter="Program" /p:AltCoverForce=true /p:AltCoverLocalSource=true'
