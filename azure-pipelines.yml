@@ -73,4 +73,4 @@ steps:
   displayName: 'Publish code coverage'
   inputs:
     codeCoverageTool: Cobertura
-    summaryFileLocation: ./test/artifacts/cobertura.xml  
+    summaryFileLocation: ./test/artifacts/Cobertura.xml  
