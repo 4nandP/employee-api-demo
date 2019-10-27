@@ -63,10 +63,10 @@ steps:
 
 #https://marketplace.visualstudio.com/acquisition?itemName=Palmmedia.reportgenerator
 - task: Palmmedia.reportgenerator.reportgenerator-build-release-task.reportgenerator@4
-  displayName: ReportGenerator
+  displayName: 'Report Generator'
   inputs:
-    reports: '$(Build.SourcesDirectory)/tests/**/coverage.cobertura.xml'
-    targetdir: '$(Build.SourcesDirectory)/CodeCoverage'
+    reports: './test/**/coverage.xml'
+    targetdir: './test/artifacts'
     reporttypes: 'HtmlInline_AzurePipelines;Cobertura;Badges'
 
 - task: PublishCodeCoverageResults@1
